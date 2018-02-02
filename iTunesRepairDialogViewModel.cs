@@ -11,26 +11,12 @@ using Tenorshare.UI.Presentation;
 using Tenorshare.Util;
 using TunesCareDLL;
 
-namespace iTransGo.ViewModels
+namespace Test.ViewModels
 {
-    public enum iTunesRepairState {
-        Initialize,
-        StartDownload,
-        Downloading,
-        DownloadTimeOut,
-        DownloadFinished,
-        DownloadStop,
-        StartInstall,
-        Installing,
-        InstallSucceed,
-        InstallFailed
-    }
-
     public class iTunesRepairDialogViewModel:ViewModelBase
     {
         private DateTime latestRaiseTime = DateTime.Now;
         private double latestRaiseSize = 0;
-        private DateTime latestHeartbeat = DateTime.Now;
 
         private Task RepairTask;
 
@@ -102,8 +88,6 @@ namespace iTransGo.ViewModels
             }
         }
 
-        public iTunesRepairDialog dialog;
-
         public RelayCommand CloseDialogCommand {
             get {
                 return new RelayCommand((p) => {
@@ -127,11 +111,8 @@ namespace iTransGo.ViewModels
             }
         }
 
-        public ContentControl Content;
-
         public bool BeginiTunesRepair() {
-            iTunesRepairStatus = iTunesRepairState.StartDownload;
-            String DownloadPath = System.IO.Path.Combine(Common.GetHardDiskLargestFreeSpace(), "Tenorshare", "iTransGo") + "\\" ;
+            String DownloadPath = System.IO.Path.Combine(Common.GetHardDiskLargestFreeSpace(), "Test") + "\\" ;
             if (!Directory.Exists(DownloadPath)) {
                 Directory.CreateDirectory(DownloadPath);
             }
@@ -139,20 +120,10 @@ namespace iTransGo.ViewModels
             bool isDownloadSuccess = true;
             int noSpeedCount = 0;
             RepairTask = Task.Factory.StartNew(() => {
-                DispatcherHelper.CheckBeginInvokeOnUI(() => {
-                    iTunesRepairStatus = iTunesRepairState.Downloading;
-                    GifPlay();
-                });
                 TunesCareWrapper.DownloadItunes(DownloadPath, (p, q) => {
                     if (noSpeedCount > 10) {
                         if (iTunesRepairStatus == iTunesRepairState.Downloading) {
-                            DispatcherHelper.CheckBeginInvokeOnUI(() => {
-                                iTunesRepairStatus = iTunesRepairState.DownloadTimeOut;
-                            });
                             Thread.Sleep(1000);
-                            DispatcherHelper.CheckBeginInvokeOnUI(() => {
-                                GifPlay(false);
-                            });
                         }
                         return;
                     }
@@ -179,48 +150,20 @@ namespace iTransGo.ViewModels
                     string InstallPath = Path.Combine(Path.GetDirectoryName(DownloadPath), Path.GetFileNameWithoutExtension(DownloadPath));
                     Directory.CreateDirectory(InstallPath);
                     int res = TunesCareWrapper.InstallItunes(DownloadPath, InstallPath, (q, msg, x, y) => {
-                        DispatcherHelper.CheckBeginInvokeOnUI(() => {
-                            iTunesRepairStatus = iTunesRepairState.Installing;
-                            GifPlay();
                             InstallMessage = msg;
-                        });
                     });
                     if (res == 0) {
                         downcountnumber = 5;
-                        DispatcherHelper.CheckBeginInvokeOnUI(() => {
-                            iTunesRepairStatus = iTunesRepairState.InstallSucceed;
-                        });
                         Thread.Sleep(1000);
                         BeginDownCount();
-                        DispatcherHelper.CheckBeginInvokeOnUI(() => {
-                            GifPlay(false);
-                        });
                     }
                     else {
-                        DispatcherHelper.CheckBeginInvokeOnUI(() => {
-                            iTunesRepairStatus = iTunesRepairState.InstallFailed;
-                        });
                         Thread.Sleep(1000);
                         BeginDownCount();
-                        DispatcherHelper.CheckBeginInvokeOnUI(() => {
-                            GifPlay(false);
-                        });
                     }
                 }
             });
             return true;
-        }
-
-        private void GifPlay(bool isReplay = true) {
-            MediaElement temp = Helpers.VisualTreeHelper.GetChildObject<MediaElement>(Content, "m_gif");
-            temp.Play();
-            if (isReplay) {
-                temp.MediaEnded += (sender, e) => {
-                    MediaElement media = (MediaElement)sender;
-                    media.Position = TimeSpan.FromMilliseconds(1);
-                    media.Play();
-                };
-            }
         }
 
         private void BeginDownCount() {
