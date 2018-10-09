@@ -1,0 +1,1018 @@
+<UserControl x:Class="iCareFone.View.BookmarkManagerView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:iCareFone.View"
+             xmlns:Controls="clr-namespace:iCareFone.Controls"
+             xmlns:controls="clr-namespace:TS.UI.Controls;assembly=TS.UI"
+             xmlns:xctk="clr-namespace:Xceed.Wpf.Toolkit;assembly=TS.UI"
+             xmlns:behaviours="clr-namespace:TS.UI.Behaviours;assembly=TS.UI"
+             xmlns:localconverters="clr-namespace:iCareFone.Converters"
+             xmlns:converters="clr-namespace:TS.UI.Converters;assembly=TS.UI"
+             xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
+             mc:Ignorable="d"
+             d:DesignHeight="557"
+             d:DesignWidth="810"
+             Loaded="UserControl_Loaded"
+             >
+    <UserControl.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="pack://application:,,,/TS.UI;component/Assets/CheckBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TS.UI;component/Assets/DataGrid.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TS.UI;component/Assets/Button.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TS.UI;component/Assets/XceedControl.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TS.UI;component/Assets/TextBox.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/TS.UI;component/Assets/Menu.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/iCareFone;component/Themes/Assets/Menu.xaml" />
+                <ResourceDictionary Source="pack://application:,,,/iCareFone;component/Themes/Assets/ProgressRing.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <DataTemplate x:Key="DeleteSignalFileNotifyDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Question}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_delete_single_tip}"
+                                              DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+                        <Button Content="{DynamicResource delete_tip}" Style="{DynamicResource App.Style.Button.Normal}"
+                            Command="{Binding DataContext.ContinueCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            MinHeight="30" MinWidth="120" Margin="0 0 30 0"/>
+                        <Button Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Hollow}"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                             MinHeight="30" MinWidth="120" />
+
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="DeleteFilesNotifyDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Question}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_delete_multi_tip}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+                        <Button Content="{DynamicResource delete_tip}" Style="{DynamicResource App.Style.Button.Normal}"
+                            Command="{Binding DataContext.ContinueCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            MinHeight="34" MinWidth="140" Margin="0 0 30 0"/>
+
+                        <Button Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Hollow}"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                             MinHeight="34" MinWidth="140" />
+
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="DeleteFilesAndFoldersNotifyDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Question}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_delete_various_tip}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+                        <Button Content="{DynamicResource delete_tip}" Style="{DynamicResource App.Style.Button.Normal}"
+                            Command="{Binding DataContext.ContinueCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            MinHeight="34" MinWidth="140" Margin="0 0 30 0"/>
+
+                        <Button Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Hollow}"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                             MinHeight="34" MinWidth="140" />
+
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="DeleteFoldersNotifyDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Question}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_delete_various_tip}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+                        <Button Content="{DynamicResource delete_tip}" Style="{DynamicResource App.Style.Button.Normal}"
+                            Command="{Binding DataContext.ContinueCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            MinHeight="34" MinWidth="140" Margin="0 0 30 0"/>
+
+                        <Button Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Hollow}"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                             MinHeight="34" MinWidth="140" />
+
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="DeleteSingleFoldersNotifyDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Question}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_delete_various_tip}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+                        <Button Content="{DynamicResource delete_tip}" Style="{DynamicResource App.Style.Button.Normal}"
+                            Command="{Binding DataContext.ContinueCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"
+                            MinHeight="34" MinWidth="140" Margin="0 0 30 0"/>
+
+                        <Button Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Hollow}"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                             MinHeight="34" MinWidth="140" />
+
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="DeletingFilesTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <controls:BBCodeBlock x:Name="tb_importting" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                          BBCode="{DynamicResource manager_bookmark_view_deleting_tip}" />
+                    <ProgressBar Grid.Row="1" IsIndeterminate="{Binding DataContext.Waitting, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                 Value="{Binding DataContext.Progress, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" HorizontalAlignment="Stretch" 
+                                 Height="10" Style="{DynamicResource Style.ProgressBar.iCareFone}"/>
+
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+                        <Button Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Normal}"
+                            Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                             MinHeight="30" MinWidth="120" />
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="DeleteCompleteNotifyDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="success_tip" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_OK}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_delete_success_tip}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    </StackPanel>
+                    <StackPanel x:Name="unsuccess_tip" Visibility="Collapsed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Information}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_delete_failed_tip}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+                        <Button Content="{DynamicResource ok_tip}" Style="{DynamicResource App.Style.Button.Normal}"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                            MinHeight="30" MinWidth="120" />
+                    </StackPanel>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="False">
+                        <Setter TargetName="success_tip" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="unsuccess_tip" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="True">
+                        <Setter TargetName="success_tip" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="unsuccess_tip" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+            <DataTemplate x:Key="DeleteSingleCompleteNotifyDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="success_tip" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_OK}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_delete_single_success_tip}" DataContext="{Binding DataContext, RelativeSource={RelativeSource AncestorType={x:Type Window}}}"/>
+                    </StackPanel>
+                    <StackPanel x:Name="unsuccess_tip" Visibility="Collapsed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Information}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_delete_single_failed_tip}"/>
+                    </StackPanel>
+                    <StackPanel Grid.Row="3" HorizontalAlignment="Right" VerticalAlignment="Bottom" Orientation="Horizontal">
+                        <Button Content="{DynamicResource ok_tip}" Style="{DynamicResource App.Style.Button.Normal}"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                            MinHeight="30" MinWidth="120" />
+                    </StackPanel>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="False">
+                        <Setter TargetName="success_tip" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="unsuccess_tip" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="True">
+                        <Setter TargetName="success_tip" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="unsuccess_tip" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+            <DataTemplate x:Key="EditDialogTemplate">
+                <Grid Margin="30">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="TB_NameEdit" Grid.Row="0" FontSize="13" VerticalContentAlignment="Center"
+                             Style="{DynamicResource Style.TextBox.NoWrap}" Padding="5 0 0 0"
+                             Text="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.BookmarkNameEditText,UpdateSourceTrigger=PropertyChanged}"
+                             >
+                        <i:Interaction.Behaviors>
+                            <behaviours:TextBoxWatermarkBehaviour WaterText="{DynamicResource bookmark_name}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                    <TextBox x:Name="TB_UrlEdit" Grid.Row="2" FontSize="13" VerticalContentAlignment="Center" 
+                             Style="{DynamicResource Style.TextBox.NoWrap}" Padding="5 0 0 0"
+                             Text="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.BookmarkUrlEditText}">
+                        <i:Interaction.Behaviors>
+                            <behaviours:TextBoxWatermarkBehaviour WaterText="{DynamicResource bookmark_url}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                    <TextBlock x:Name="TB_waiting" Grid.Row="0" FontSize="13" Text="{DynamicResource manager_bookmark_view_saving_bookmark_tip}" Visibility="Collapsed"/>
+                    <ProgressBar x:Name="PB_SaveBookmark" Grid.Row="2" IsIndeterminate="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Editing}" 
+                                 Value="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Progress}" HorizontalAlignment="Stretch" 
+                                 Height="10" Style="{DynamicResource Style.ProgressBar.iCareFone}" Visibility="Collapsed"/>
+                    <StackPanel x:Name="sp_button" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Content="{DynamicResource save_tip}" Style="{DynamicResource App.Style.Button.Normal}" MinWidth="120" Height="30"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.SaveCommand}"/>
+                        <Button Margin="40 0 0 0" Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Hollow}" MinWidth="120" Height="30"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}"/>
+                    </StackPanel>
+                    <Button x:Name="Btn_Cancel" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="Collapsed" 
+                            Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Normal}" MinWidth="120" Height="30"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.CancelCommand}"/>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Editing}" Value="False">
+                        <Setter TargetName="PB_SaveBookmark" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="TB_waiting" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="Btn_Cancel" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="sp_button" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="TB_UrlEdit" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="TB_NameEdit" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Editing}" Value="True">
+                        <Setter TargetName="PB_SaveBookmark" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="TB_waiting" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="Btn_Cancel" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="sp_button" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="TB_UrlEdit" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="TB_NameEdit" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+            <DataTemplate x:Key="EditCompleteTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="tb_succeed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_OK}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_save_success_tip}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext}"/>
+                    </StackPanel>
+                    <StackPanel x:Name="tb_failed" Visibility="Collapsed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Information}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_save_failed_tip}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext}"/>
+                    </StackPanel>
+                    <Button Grid.Row="3" Content="{DynamicResource ok_tip}" Style="{DynamicResource App.Style.Button.Normal}"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" MinWidth="120" Height="30"
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="True">
+                        <Setter TargetName="tb_succeed" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="tb_failed" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="False">
+                        <Setter TargetName="tb_succeed" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="tb_failed" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+            <DataTemplate x:Key="RenameDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <TextBox x:Name="TB_NameEdit" Grid.Row="1" FontSize="13" VerticalContentAlignment="Center"
+                             Style="{DynamicResource Style.TextBox.NoWrap}" Padding="5 0 0 0"
+                             Text="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.BookmarkNameEditText,UpdateSourceTrigger=PropertyChanged}"
+                             >
+                        <i:Interaction.Behaviors>
+                            <behaviours:TextBoxWatermarkBehaviour WaterText="{DynamicResource folder_name}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                    <TextBlock x:Name="TB_waiting" Grid.Row="0" Text="{DynamicResource manager_bookmark_view_saving_folder_tip}" Visibility="Collapsed"/>
+                    <ProgressBar x:Name="PB_SaveBookmark" Grid.Row="2" IsIndeterminate="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Editing}" 
+                                 Value="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Progress}" HorizontalAlignment="Stretch" 
+                                 Height="10" Style="{DynamicResource Style.ProgressBar.iCareFone}" Visibility="Collapsed"/>
+                    <StackPanel x:Name="sp_button" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Orientation="Horizontal">
+                        <Button Content="{DynamicResource save_tip}" Style="{DynamicResource App.Style.Button.Normal}" MinWidth="120" Height="30"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.SaveCommand}"/>
+                        <Button Margin="40 0 0 0" Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Hollow}" MinWidth="120" Height="30"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}"/>
+                    </StackPanel>
+                    <Button x:Name="Btn_Cancel" Grid.Row="3" VerticalAlignment="Bottom" HorizontalAlignment="Right" Visibility="Collapsed" 
+                            Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Normal}" MinWidth="120" Height="30"
+                            Command="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.CancelCommand}"/>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Editing}" Value="False">
+                        <Setter TargetName="PB_SaveBookmark" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="TB_waiting" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="Btn_Cancel" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="sp_button" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="TB_NameEdit" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Editing}" Value="True">
+                        <Setter TargetName="PB_SaveBookmark" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="TB_waiting" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="Btn_Cancel" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="sp_button" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="TB_NameEdit" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+            <DataTemplate x:Key="RenameCompleteTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="tb_succeed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_OK}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_save_folder_success_tip}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext}"/>
+                    </StackPanel>
+                    <StackPanel x:Name="tb_failed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Information}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_save_folder_failed_tip}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext}"/>
+                    </StackPanel>
+                    <Button Grid.Row="3" Content="{DynamicResource ok_tip}" Style="{DynamicResource App.Style.Button.Normal}" MinWidth="120" Height="30"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="True">
+                        <Setter TargetName="tb_succeed" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="tb_failed" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="False">
+                        <Setter TargetName="tb_succeed" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="tb_failed" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+            <DataTemplate x:Key="MoveDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="tb_wait" Text="{DynamicResource manager_bookmark_view_moving_bookmark_tip}" />
+                    <ProgressBar Grid.Row="1" IsIndeterminate="{Binding DataContext.Editing, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                 Value="{Binding DataContext.Progress, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" HorizontalAlignment="Stretch" 
+                                 Height="10" Style="{DynamicResource Style.ProgressBar.iCareFone}"/>
+                    <Button Grid.Row="3" Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Normal}" MinWidth="120" Height="30"
+                            Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="MoveComplateTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="tb_succeed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_OK}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_moving_bookmark_success_tip}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext}"/>
+                    </StackPanel>
+                    <StackPanel x:Name="tb_failed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Information}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_moving_bookmark_failed_tip}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext}"/>
+                    </StackPanel>
+                    <Button Grid.Row="3" Content="{DynamicResource ok_tip}" Style="{DynamicResource App.Style.Button.Normal}" MinWidth="120" Height="30"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="True">
+                        <Setter TargetName="tb_succeed" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="tb_failed" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="False">
+                        <Setter TargetName="tb_succeed" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="tb_failed" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+            <DataTemplate x:Key="ExportingDialogTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock x:Name="tb_wait" Text="{DynamicResource manager_bookmark_view_exporting_bookmark_tip}" />
+                    <ProgressBar Grid.Row="1" IsIndeterminate="{Binding DataContext.Waitting, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" 
+                                 Value="{Binding DataContext.Progress, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" HorizontalAlignment="Stretch" 
+                                 Height="10" Style="{DynamicResource Style.ProgressBar.iCareFone}"/>
+                    <Button Grid.Row="3" Content="{DynamicResource cancel_tip}" Style="{DynamicResource App.Style.Button.Normal}" MinWidth="120" Height="30"
+                            Command="{Binding DataContext.CancelCommand, RelativeSource={RelativeSource AncestorType={x:Type Window}}}" VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                </Grid>
+            </DataTemplate>
+            <DataTemplate x:Key="ExportComplateTemplate">
+                <Grid Margin="30,40">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="2*"/>
+                    </Grid.RowDefinitions>
+                    <StackPanel x:Name="tb_succeed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_OK}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_exporting_bookmark_success_tip}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext}"/>
+                    </StackPanel>
+                    <StackPanel x:Name="tb_failed" Orientation="Horizontal" Grid.RowSpan="2">
+                        <Viewbox Width="40" Height="40">
+                            <Path Data="{DynamicResource icon_Information}" Fill="{DynamicResource ColorBrush.ImageControl.Foreground}"/>
+                        </Viewbox>
+                        <controls:BBCodeBlock VerticalAlignment="Center" Margin="10 0 0 0" TextWrapping="Wrap" MaxWidth="400" BBCode="{DynamicResource manager_bookmark_view_exporting_bookmark_failed_tip}" DataContext="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext}"/>
+                    </StackPanel>
+                    <Button Grid.Row="1" Content="{DynamicResource ok_tip}" Style="{DynamicResource App.Style.Button.Normal}" MinWidth="120" Height="30"
+                            Command="{Binding Source={x:Static SystemCommands.CloseWindowCommand}}" 
+                            VerticalAlignment="Bottom" HorizontalAlignment="Right"/>
+                </Grid>
+                <DataTemplate.Triggers>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="True">
+                        <Setter TargetName="tb_succeed" Property="Visibility" Value="Visible"/>
+                        <Setter TargetName="tb_failed" Property="Visibility" Value="Collapsed"/>
+                    </DataTrigger>
+                    <DataTrigger Binding="{Binding RelativeSource={RelativeSource AncestorType=Window},Path=DataContext.Succeed}" Value="False">
+                        <Setter TargetName="tb_succeed" Property="Visibility" Value="Collapsed"/>
+                        <Setter TargetName="tb_failed" Property="Visibility" Value="Visible"/>
+                    </DataTrigger>
+                </DataTemplate.Triggers>
+            </DataTemplate>
+            
+            <local:BookmarkIconTemplateSelector x:Key="BookmarkIconTemplateSelector"/>
+            <localconverters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+            <converters:NullableToVisibilityConverter x:Key="NullableToVisibilityConverter" />
+            <converters:NullableToBooleanConverter x:Key="NullableToBooleanConverter" />
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
+            
+        </ResourceDictionary>
+    </UserControl.Resources>
+    <xctk:BusyIndicator x:Name="busyIndicator" IsBusy="{Binding IsQuerying}" Background="Transparent" BorderThickness="0" BusyChanged="busyIndicator_BusyChanged">
+        <xctk:BusyIndicator.BusyContentTemplate>
+            <DataTemplate>
+                <Grid>
+                    <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                        <controls:ModernProgressRing Height="88" Width="88" Style="{DynamicResource Style.ProgressRing.Plane}" 
+                                                 IsActive="{Binding IsBusy, RelativeSource={RelativeSource AncestorType={x:Type xctk:BusyIndicator}}}" 
+                                                 Foreground="{DynamicResource AccentColorBrush}"/>
+                        <TextBlock Text="{DynamicResource manager_bookmark_view_Loading_tip}" Margin="0 20 0 0"/>
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+        </xctk:BusyIndicator.BusyContentTemplate>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60" />
+                <RowDefinition Height="*" />
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
+                    <Menu x:Name="btn_Add" FontSize="13" Margin="20,0,0,0"
+                          HorizontalAlignment="Left" VerticalAlignment="Center"
+                          Style="{DynamicResource Style.Menu.Normal}"
+                          >
+                        <MenuItem Header="{DynamicResource add_tip}" Style="{DynamicResource App.Style.MenuItem.Add}">
+                            <MenuItem Header="{DynamicResource add_folder_tip}"
+                                      Style="{DynamicResource Style.MenuItem.Normal}"
+                                      Command="{Binding AddBookmarkFolderCommand}"
+                                      CommandParameter="{Binding SelectedItem, ElementName=host_Bookmarks}"
+                                      />
+                            <MenuItem Header="{DynamicResource add_bookmark_tip}"
+                                      Style="{DynamicResource Style.MenuItem.Normal}"
+                                      Command="{Binding AddBookmarkCommand}"
+                                      CommandParameter="{Binding SelectedItem, ElementName=host_Bookmarks}"
+                                      />
+                        </MenuItem>
+                    </Menu>
+                    <Button x:Name="btn_Export" FontSize="13" Margin="20,0,0,0"
+                            HorizontalAlignment="Left" VerticalAlignment="Center"
+                            Style="{DynamicResource App.Style.Button.Export}"
+                            Content="{DynamicResource export_tip}"
+                            Command="{Binding ExportCommand}"
+                            />
+                    <Button x:Name="btn_Delete" FontSize="13" Margin="20,0,0,0"
+                            HorizontalAlignment="Left" VerticalAlignment="Center"
+                            Style="{DynamicResource App.Style.Button.Trash}"
+                            Content="{DynamicResource delete_tip}"
+                            Command="{Binding DeleteBookmarkCommand}"
+                            />
+                    <Button x:Name="btn_Refresh" FontSize="13" Margin="20,0,0,0"
+                            HorizontalAlignment="Left" VerticalAlignment="Center"
+                            Style="{DynamicResource App.Style.Button.Refresh}"
+                            Content="{DynamicResource refresh_tip}"
+                            Command="{Binding RefreshCommand}"
+                            />
+                </StackPanel>
+                <Grid HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,20,0">
+                    <TextBox x:Name="tb_Filter" Width="160" Height="30" FontSize="13" TextAlignment="Left"
+                             HorizontalAlignment="Right" Background="Transparent"
+                             Text="{Binding QueryString, UpdateSourceTrigger=PropertyChanged}"
+                             >
+                        <TextBox.Style>
+                            <Style TargetType="{x:Type TextBox}">
+                                <Setter Property="Background" Value="Transparent" />
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="{x:Type TextBox}">
+                                            <Border Height="30" CornerRadius="15" BorderBrush="{DynamicResource App.ColorBrush.Border.Normal}" BorderThickness="1" Background="{TemplateBinding Background}" SnapsToDevicePixels="True">
+                                                <Grid>
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                        <ColumnDefinition Width="Auto" />
+                                                    </Grid.ColumnDefinitions>
+                                                    <Grid Grid.Column="0">
+                                                        <Button Width="20" Height="20" Margin="5,0,0,0"
+                                                                HorizontalAlignment="Left" VerticalAlignment="Center"
+                                                                Style="{DynamicResource App.Style.Button.Search}"
+                                                                IsEnabled="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource NullableToBooleanConverter}}"
+                                                                />
+                                                    </Grid>
+                                                    <Grid Grid.Column="1">
+                                                        <TextBlock x:Name="PART_WaterMark" Margin="5,0,0,0" Opacity="0.3" Foreground="{DynamicResource App.ColorBrush.Font.Dark}" FontSize="{TemplateBinding FontSize}" VerticalAlignment="Center" />
+                                                        <ScrollViewer x:Name="PART_ContentHost" VerticalAlignment="Center" VerticalContentAlignment="Center" Background="Transparent" Focusable="False" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Disabled" />
+                                                    </Grid>
+                                                    <Grid Grid.Column="2">
+                                                        <Button Width="16" Height="16" Margin="2,0,5,0"
+                                                                HorizontalAlignment="Right" VerticalAlignment="Center"
+                                                                Style="{DynamicResource App.Style.Button.Fork}"
+                                                                Visibility="{Binding Text, RelativeSource={RelativeSource TemplatedParent}, Converter={StaticResource NullableToVisibilityConverter}, ConverterParameter=Hidden}"
+                                                                Click="ButtonClean_Click"
+                                                                />
+                                                    </Grid>
+                                                </Grid>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsEnabled" Value="False">
+                                                    <Setter Property="Opacity" Value="0.5" />
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBox.Style>
+                        <i:Interaction.Behaviors>
+                            <behaviours:TextBoxWatermarkBehaviour WaterText="{DynamicResource search_tip}" />
+                        </i:Interaction.Behaviors>
+                    </TextBox>
+                </Grid>
+            </Grid>
+            
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="30" />
+                </Grid.RowDefinitions>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="45*" />
+                        <ColumnDefinition Width="55*" />
+                    </Grid.ColumnDefinitions>
+                    <Grid Grid.Column="0" x:Name="column1"/>
+                    <Grid Grid.Column="1" x:Name="column2"/>
+                </Grid>
+
+                <Controls:TreeListView x:Name="host_Bookmarks" BorderThickness="0"
+                                       Controls:TreeViewExtensions.EnableMultiSelect="true" Foreground="#3D3D3D"
+                                       Controls:TreeViewExtensions.SelectedItems="{Binding SelectedTreeNodes,Mode=TwoWay}"
+                                       AlternationCount="2" ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                                       Template="{DynamicResource TreeListViewControlTemplate}"
+                                       ItemContainerStyle="{DynamicResource TreeListViewItemStyle}"
+                                       ItemsSource="{Binding TreeNodeList}" FontSize="13" Background="White"
+                                       ScrollViewer.CanContentScroll="True"
+                                       VirtualizingPanel.IsVirtualizing="True" VirtualizingPanel.ScrollUnit="Item"
+                                       VirtualizingPanel.IsVirtualizingWhenGrouping="True"
+                                       MouseMove="PART_ScrollContentPresenter_MouseMove" 
+                                       MouseUp="PART_ScrollContentPresenter_MouseUp"
+                                       >
+                    <i:Interaction.Triggers>
+                        <i:EventTrigger EventName="SelectedItemChanged">
+                            <i:InvokeCommandAction Command="{Binding TreeViewSelected}" CommandParameter="{Binding ElementName=host_Bookmarks,Path=SelectedItem}"/>
+                        </i:EventTrigger>
+                    </i:Interaction.Triggers>
+                    <Controls:TreeListView.Resources>
+                        <localconverters:LevelToIndentConverter x:Key="LevelToIndentConverter"/>
+                        <localconverters:BooleanToAngleConverter x:Key="BooleanToAngle"/>
+                        <!--#region 数据树下拉按钮样式-->
+                        <Style TargetType="ToggleButton" x:Key="ExpandCollapseToggleStyle">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ToggleButton}">
+                                        <Canvas x:Name="Back" Background="Transparent" Width="10" Height="10">
+                                            <Path HorizontalAlignment="Center" VerticalAlignment="Center" Name="PathFill" Fill="Black"  Data="M 1 2.5 h 1 v 2 H 1 V 2.5 Z M 2 3.5 h 1 v 2 H 2 V 3.5 Z M 3 4.5 h 1 v 2 H 3 V 4.5 Z M 4 5.5 h 1 v 2 H 4 V 5.5 Z M 8 2.5 h 1 v 2 H 8 V 2.5 Z M 7 3.5 h 1 v 2 H 7 V 3.5 Z M 6 4.5 h 1 v 2 H 6 V 4.5 Z M 5 5.5 h 1 v 2 H 5 V 5.5 Z">
+                                                <UIElement.RenderTransform>
+                                                    <TransformGroup>
+                                                        <ScaleTransform/>
+                                                        <SkewTransform/>
+                                                        <RotateTransform  CenterX="5" CenterY="5" Angle="{Binding RelativeSource={RelativeSource AncestorType=ToggleButton},Path=IsChecked,Converter={StaticResource BooleanToAngle}}"/>
+                                                        <TranslateTransform/>
+                                                    </TransformGroup>
+                                                </UIElement.RenderTransform>
+                                            </Path>
+                                        </Canvas>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                        <!--#endregion-->
+
+                        <Style x:Key="GridViewColumnHeaderStyle_Manager" TargetType="{x:Type GridViewColumnHeader}">
+                            <Setter Property="FocusVisualStyle" Value="{x:Null}" />
+                            <Setter Property="Background" Value="Transparent" />
+                            <Setter Property="BorderBrush" Value="Transparent" />
+                            <Setter Property="HorizontalContentAlignment" Value="Left" />
+                            <Setter Property="VerticalContentAlignment" Value="Center" />
+                            <Setter Property="BorderThickness" Value="0" />
+                            <Setter Property="Margin" Value="15 0 0 0" />
+                            <Setter Property="Padding" Value="0" />
+                            <Setter Property="Cursor" Value="Arrow" />
+                            <Setter Property="OverridesDefaultStyle" Value="True" />
+                            <Setter Property="SnapsToDevicePixels" Value="True" />
+                            <Setter Property="IsTabStop" Value="False" />
+                            <Setter Property="ContextMenuService.IsEnabled" Value="False" />
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type GridViewColumnHeader}">
+                                        <Grid Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Background="{TemplateBinding Background}">
+                                            <ContentControl HorizontalAlignment="Left" VerticalAlignment="Center"
+                                            Padding="{TemplateBinding Padding}"
+                                            HorizontalContentAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                            VerticalContentAlignment="{TemplateBinding VerticalContentAlignment}"
+                                            Content="{TemplateBinding Content}"
+                                            ContentStringFormat="{TemplateBinding ContentStringFormat}"
+                                            ContentTemplate="{TemplateBinding ContentTemplate}"
+                                            ContentTemplateSelector="{TemplateBinding ContentTemplateSelector}"
+                                            SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                            />
+                                            <Grid Width="10" HorizontalAlignment="Right" VerticalAlignment="Center" Margin="0,0,10,0" >
+                                                <Path x:Name="path_Ascending" Stroke="{TemplateBinding Foreground}" Data="M0,5 L5,0 10,5" Visibility="Collapsed" />
+                                                <Path x:Name="path_Descending" Stroke="{TemplateBinding Foreground}" Data="M0,0 L5,5 10,0" Visibility="Collapsed" />
+                                            </Grid>
+                                        </Grid>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+
+                        <!--相邻栏交错背景色-->
+                        <AlternationConverter x:Key="BackgroundConverter">
+                            <SolidColorBrush>#FFFFFFFF</SolidColorBrush>
+                            <SolidColorBrush>#FFFFFFFF</SolidColorBrush>
+                            <!--<SolidColorBrush>#FFFCFCFC</SolidColorBrush>-->
+                        </AlternationConverter>
+
+                        <DataTemplate x:Key="NameCellTemplate">
+                            <DockPanel ToolTip="{Binding ElementName=TB_name, Path=Text}">
+                                <ToggleButton x:Name="Expander" Style="{StaticResource ExpandCollapseToggleStyle}" VerticalAlignment="Center"
+                                              Margin="{Binding Level, Converter={StaticResource LevelToIndentConverter},RelativeSource={RelativeSource AncestorType={x:Type Controls:TreeListViewItem}}}"
+                                              IsChecked="{Binding Path=IsExpanded,RelativeSource={RelativeSource AncestorType={x:Type Controls:TreeListViewItem}}}" ClickMode="Press"/>
+                                <!--图标-->
+                                <ContentControl x:Name="PART_BookmarkIcon" Margin="10 0 0 0" Height="20" Width="20" Content="{Binding Path=Header,RelativeSource={RelativeSource AncestorType={x:Type Controls:TreeListViewItem}}}" ContentTemplateSelector="{StaticResource BookmarkIconTemplateSelector}">
+                                    <ContentControl.Resources>
+                                        <DataTemplate x:Key="bookmark">
+                                            <Image Source="/iCareFone;component/Themes/Images/Manager/Bookmark/icon_list_Url.png" Stretch="UniformToFill">
+                                                <Image.CacheMode>
+                                                    <BitmapCache EnableClearType="False"/>
+                                                </Image.CacheMode>
+                                            </Image>
+                                        </DataTemplate>
+                                        <DataTemplate x:Key="bookmarkFolder">
+                                            <Image Source="/iCareFone;component/Themes/Images/Manager/Bookmark/icon_list_Folder.png" Stretch="UniformToFill">
+                                                <Image.CacheMode>
+                                                    <BitmapCache EnableClearType="False"/>
+                                                </Image.CacheMode>
+                                            </Image>
+                                        </DataTemplate>
+                                    </ContentControl.Resources>
+                                </ContentControl>
+                                <TextBlock x:Name="TB_name" Margin="10 0 0 0"  Text="{Binding Name}" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Left" TextTrimming="CharacterEllipsis"/>
+                            </DockPanel>
+                            <DataTemplate.Triggers>
+                                <DataTrigger Binding="{Binding Path=HasItems,RelativeSource={RelativeSource AncestorType={x:Type Controls:TreeListViewItem}}}" Value="False">
+                                    <Setter TargetName="Expander" Property="Visibility" Value="Hidden"/>
+                                </DataTrigger>
+                            </DataTemplate.Triggers>
+                        </DataTemplate>
+                        <DataTemplate x:Key="UrlCellTemplate">
+                            <StackPanel VerticalAlignment="Center">
+                                <TextBlock Margin="10 0 0 0" ToolTip="{Binding Uri}" Text="{Binding Uri}" TextAlignment="Center"  VerticalAlignment="Center" HorizontalAlignment="Left"  TextTrimming="CharacterEllipsis"/>
+                            </StackPanel>
+                        </DataTemplate>
+                        <GridViewColumnCollection x:Key="gvcc">
+                            <GridViewColumn HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle_Manager}" Header="{DynamicResource manager_bookmark_view_TreeV_header1_tip}" CellTemplate="{StaticResource NameCellTemplate}" Width="{Binding ElementName=column1,Path=ActualWidth}"/>
+                            <GridViewColumn HeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle_Manager}" Header="{DynamicResource manager_bookmark_view_TreeV_header2_tip}" CellTemplate="{StaticResource UrlCellTemplate}" Width="{Binding ElementName=column2,Path=ActualWidth}" />
+                        </GridViewColumnCollection>
+                        <ControlTemplate x:Key="TreeListViewControlTemplate" TargetType="{x:Type Controls:TreeListView}">
+                            <Border x:Name="Bd" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" SnapsToDevicePixels="True">
+                                <Grid Background="White">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="6*" />
+                                        <RowDefinition Height="94*" />
+                                    </Grid.RowDefinitions>
+                                    <Border Grid.Row="0" BorderThickness="0" BorderBrush="{x:Null}" Background="#FFF0F0F0" ContextMenuService.IsEnabled="False">
+                                        <GridViewHeaderRowPresenter Columns="{StaticResource gvcc}" ContextMenuService.IsEnabled="False"/>
+                                    </Border>
+                                    <ScrollViewer Grid.Row="1" x:Name="_tv_scrollviewer_" Background="{TemplateBinding Background}" CanContentScroll="False"
+                                                  Focusable="False" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" 
+                                                  Padding="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" 
+                                                  VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                                  Style="{DynamicResource Style.ScrollViewer.Microscler}" VirtualizingPanel.IsVirtualizing="True">
+                                        <ItemsPresenter/>
+                                    </ScrollViewer>
+                                </Grid>
+                            </Border>
+                        </ControlTemplate>
+                        <Style x:Key="TreeListViewItemStyle" TargetType="{x:Type Controls:TreeListViewItem}">
+                            <EventSetter Event="TreeViewItem.MouseDoubleClick" Handler="TreeViewItem_MouseDoubleClick"/>
+                            <EventSetter Event="TreeViewItem.PreviewMouseRightButtonUp" Handler="TreeViewItem_PreviewMouseRightButtonUp"/>
+                            <!--<EventSetter Event="KeyDown" Handler="host_Bookmarks_KeyDown"/>-->
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type Controls:TreeListViewItem}">
+                                        <StackPanel>
+                                            <Border Name="Bd"
+                                                        Background="{TemplateBinding Background}"
+                                                        BorderBrush="#FFF0F0F0"
+                                                        BorderThickness="0 0 0 1"                                                    
+                                                        Height="45"
+                                                        Padding="{TemplateBinding Padding}">
+                                                <GridViewRowPresenter x:Name="PART_Header"
+                                                                            Content="{TemplateBinding Header}"                                                        
+                                                                            Columns="{StaticResource gvcc}"/>
+                                            </Border>
+                                            <ItemsPresenter x:Name="ItemsHost" />
+                                        </StackPanel>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="IsExpanded" Value="false">
+                                                <Setter TargetName="ItemsHost" Property="Visibility" Value="Collapsed"/>
+                                            </Trigger>
+                                            <!--<Trigger Property="IsColoring" Value="True">
+                                                <Setter Property="Background" Value="{DynamicResource App.ColorBrush.DataGridRow.Hover}" />
+                                            </Trigger>-->
+                                            <Trigger Property="Controls:TreeViewExtensions.IsSelected" Value="true">
+                                                <Setter Property="Background" Value="#FFE6F7F9" />
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Setter Property="ItemsPanel">
+                                <Setter.Value>
+                                    <ItemsPanelTemplate>
+                                        <VirtualizingStackPanel IsItemsHost="True"/>
+                                    </ItemsPanelTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <!--<EventSetter Event="MouseLeftButtonDown" Handler="TreeListViewItem_MouseLeftButtonDown"/>
+                            <Setter Property="IsColoring" Value="{Binding IsSelect}"/>-->
+                            <!--<Setter Property="Controls:TreeViewExtensions.IsSelected" Value="{Binding IsSelect}"/>-->
+                            <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+                            <Setter Property="IsExpanded" Value="True"/>
+                            <Setter Property="VirtualizingPanel.IsVirtualizing" Value="True"/>
+                            <Setter Property="VirtualizingPanel.IsVirtualizingWhenGrouping" Value="True"/>
+                            <Setter Property="Background" Value="White"/>
+                        </Style>
+                    </Controls:TreeListView.Resources>
+                    <Controls:TreeListView.ContextMenu>
+                        <ContextMenu x:Name="ContextMenu_EditNode" Style="{DynamicResource Style.ContextMenu.Normal}">
+                            <MenuItem x:Name="MenuItem_AddNode" Header="{DynamicResource add_tip}" Style="{DynamicResource Style.MenuItem.Normal}">
+                                <MenuItem Header="{DynamicResource add_bookmark_tip}" Style="{DynamicResource Style.MenuItem.Normal}" Command="{Binding AddBookmarkCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                                <MenuItem Header="{DynamicResource add_folder_tip}" Style="{DynamicResource Style.MenuItem.Normal}" Command="{Binding AddBookmarkFolderCommand}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                            </MenuItem>
+                            <MenuItem x:Name="MenuItem_RenameNode" Header="{DynamicResource Rename_tip}"
+                                      Style="{DynamicResource Style.MenuItem.Normal}"
+                                      Command="{Binding RenameBookmark}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"
+                                      />
+                            <MenuItem x:Name="MenuItem_DeleteNode" Header="{DynamicResource delete_tip}"
+                                      Style="{DynamicResource Style.MenuItem.Normal}"
+                                      Command="{Binding DeleteBookmarkCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"
+                                      />
+                            <MenuItem x:Name="MenuItem_RefreshNode" Visibility="Collapsed"
+                                      Header="{DynamicResource refresh_tip}"
+                                      Style="{DynamicResource Style.MenuItem.Normal}"
+                                      Command="{Binding RefreshCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"
+                                      />
+                            <MenuItem x:Name="MenuItem_EditNode" Header="{DynamicResource Edit_tip}"
+                                      Style="{DynamicResource Style.MenuItem.Normal}"
+                                      Command="{Binding EditBookmarkCommand}"
+                                      CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}"
+                                      />
+                            <MenuItem x:Name="MenuItem_MoveNode" Header="{DynamicResource Move_to_tip}"
+                                      Style="{DynamicResource Style.MenuItem.Normal}"
+                                      ItemsSource="{Binding BookmarkFolderList}"
+                                      >
+                                <MenuItem.ItemContainerStyle>
+                                    <Style BasedOn="{StaticResource Style.MenuItem.Normal}" TargetType="{x:Type MenuItem}">
+                                        <Setter Property="Header" Value="{Binding Name, Mode=OneWay}" />
+                                        <Setter Property="Command" Value="{Binding DataContext.MoveBookmarkCommand, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType={x:Type Controls:TreeListView}}}" />
+                                        <Setter Property="CommandParameter" Value="{Binding DataContext, RelativeSource={RelativeSource Self}}" />
+                                    </Style>
+                                </MenuItem.ItemContainerStyle>
+                            </MenuItem>
+                            <MenuItem x:Name="MenuItem_VisiteNode" Header="{DynamicResource visit_website_tip}" Style="{DynamicResource Style.MenuItem.Normal}" Command="{Binding VisitBookmark}" CommandParameter="{Binding RelativeSource={RelativeSource Mode=FindAncestor, AncestorType=ContextMenu}, Path=PlacementTarget.SelectedItem}" />
+                        </ContextMenu>
+                    </Controls:TreeListView.ContextMenu>
+                    <Controls:TreeListView.ItemTemplate >
+                        <HierarchicalDataTemplate ItemsSource="{Binding ChildNode}">
+                            <Border BorderThickness="2" x:Name="back" MinWidth="70">
+                                <TextBlock Text="{Binding Text}" Margin="4 2"/>
+                            </Border>
+                        </HierarchicalDataTemplate>
+                    </Controls:TreeListView.ItemTemplate>
+                </Controls:TreeListView>
+                <AdornerDecorator x:Name="Select_Area" Visibility="Hidden" HorizontalAlignment="Left" VerticalAlignment="Top">
+                    <ContentPresenter>
+                        <ContentPresenter.Content>
+                            <Grid>
+                                <Border BorderThickness="1" BorderBrush="LightGray" Background="{DynamicResource AccentColorBrush}" Opacity="0.3" />
+                            </Grid>
+                        </ContentPresenter.Content>
+                    </ContentPresenter>
+                </AdornerDecorator>
+
+                <Border Grid.Row="1" BorderBrush="{DynamicResource App.ColorBrush.Border.Normal}" BorderThickness="0 1 0 0" Visibility="{Binding IsBusy, Mode=OneWay, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=InverseAndHidden, RelativeSource={RelativeSource Mode=FindAncestor, AncestorLevel=1, AncestorType={x:Type xctk:BusyIndicator}}}">
+                    <TextBlock FontSize="12" HorizontalAlignment="Center" VerticalAlignment="Center" TextAlignment="Center" MinWidth="800">
+                        <Run Text="{Binding BookmarkCountText}"/>
+                        <Run Text="{Binding BookmarkSelectedCountText}"/>
+                        <Run Text="{Binding BookmarkFolderSelectedCountText}"/>
+                    </TextBlock>
+                </Border>
+            </Grid>
+
+            <Grid x:Name="noFile_content" Grid.Row="1" Background="White" Visibility="Collapsed">
+                <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center" >
+                    <Image Source="/iCareFone;component/Themes/Images/Manager/icon_no_file.png" Width="86" Height="80"/>
+                    <TextBlock Text="{DynamicResource manager_bookmark_view_TV_no_data_tip}" HorizontalAlignment="Center" Margin="0 20 0 0" Foreground="{DynamicResource App.ColorBrush.Font.Dark}"/>
+                </StackPanel>
+            </Grid>
+
+            <Grid x:Name="noMatchFile_content" Grid.Row="1" Background="White" Visibility="{Binding IsNomatchFile, Converter={StaticResource BoolToVisibilityConverter}}">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <UserControl Height="16" Style="{DynamicResource Style.Image.Failed}"
+                                         Margin="0 10 0 0" VerticalAlignment="Top"
+                                         Foreground="#FFFF4D4D"
+                                         />
+                    <TextBlock FontSize="14" Margin="10 10 0 0" Text="{DynamicResource backup_Bookmarks_view_DG_cell_no_data_tip}" />
+                </StackPanel >
+            </Grid>
+
+            <Border Grid.RowSpan="2" Background="White" Visibility="{Binding IsiCloudTurnOff,Converter={StaticResource BoolToVisibilityConverter}}">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <Grid Grid.Row="0">
+                        <TextBlock FontSize="18" Text="{DynamicResource manager_bookmark_view_iCloud_header_tip}"
+                                       Margin="0,60,0,60" HorizontalAlignment="Center" VerticalAlignment="Center"
+                                       Foreground="{DynamicResource App.ColorBrush.Font.Dark}"
+                                       />
+                    </Grid>
+                    <Grid Grid.Row="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="20" />
+                            <RowDefinition Height="*" />
+                        </Grid.RowDefinitions>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="10" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="auto" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="10" />
+                        </Grid.ColumnDefinitions>
+                        <Grid Grid.Row="0" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Top">
+                            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Top" Content="{DynamicResource manager_bookmark_view_iCloud_image_tip1}"/>
+                        </Grid>
+                        <Grid Grid.Row="0" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Top">
+                            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Top" Content="{DynamicResource manager_bookmark_view_iCloud_image_tip2}"/>
+                        </Grid>
+                        <Grid Grid.Row="0" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Top">
+                            <ContentControl HorizontalAlignment="Center" VerticalAlignment="Top" Content="{DynamicResource manager_bookmark_view_iCloud_image_tip3}"/>
+                        </Grid>
+                        <Grid Grid.Row="2" Grid.Column="1" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                            <TextBlock MaxWidth="240" FontSize="14" TextAlignment="Left" Text="{DynamicResource manager_bookmark_view_iCloud_tip1}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap"
+                                           Foreground="{DynamicResource App.ColorBrush.Font.Dark}"
+                                           />
+                        </Grid>
+                        <Grid Grid.Row="2" Grid.Column="2" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                            <TextBlock MaxWidth="240" FontSize="14" TextAlignment="Left" Text="{DynamicResource manager_bookmark_view_iCloud_tip2}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap"
+                                           Foreground="{DynamicResource App.ColorBrush.Font.Dark}"
+                                           />
+                        </Grid>
+                        <Grid Grid.Row="2" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom">
+                            <TextBlock MaxWidth="240" FontSize="14" TextAlignment="Left" Text="{DynamicResource manager_bookmark_view_iCloud_tip3}"
+                                           HorizontalAlignment="Center" VerticalAlignment="Top" TextWrapping="Wrap"
+                                           Foreground="{DynamicResource App.ColorBrush.Font.Dark}"
+                                           />
+                        </Grid>
+                    </Grid>
+                    <Grid Grid.Row="2" VerticalAlignment="Bottom">
+                        <Button Width="200" Height="44" FontSize="16" Content="{DynamicResource retry_tip}"
+                                Margin="0,0,0,120" HorizontalAlignment="Center" VerticalAlignment="Bottom"
+                                Style="{DynamicResource App.Style.Button.Normal}"
+                                Command="{Binding RefreshCommand}"
+                                                   />
+                    </Grid>
+                </Grid>
+            </Border>
+        </Grid>
+    </xctk:BusyIndicator>
+</UserControl>
