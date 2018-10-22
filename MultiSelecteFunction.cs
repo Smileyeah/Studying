@@ -5,6 +5,7 @@ NameSpace Piao
         /// <summary>
         /// 多项选中
         /// </summary>
+        /// 还有好多BUG
         
         private void MultiSelected(TreeListViewItem treeViewItem)
         {
