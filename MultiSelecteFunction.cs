@@ -4,9 +4,18 @@ NameSpace Piao
     {
         /// <summary>
         /// 多项选中
+        /// 父层——————子层1 ——————孙层1
+        ///    |         |————————孙层2
+        ///     ——————子层2 ——————孙层3
+        ///              |————————孙层4
+        /// 选择时如果跨越了父节点，该父节点之下的节点都会被选中。
+        /// 选择的思想是：1、当孙层2 和孙层4 被选中：向上寻父，直至父节点为同一节点（父层）。
+        ///              2、在父层的子节点中获取孙层2 和孙层4 的索引。选中孙层2 和孙层4 索引之间的节点，包括孙层4，但不包括孙层2。
+        ///              3、FindLevel = 孙层2层级（选择节点）和父层层级（共同节点）之差 - 1。
+        ///              4、选择孙层2（选择节点）在父节点中索引大于孙层2的所有节点，不包括孙层2。此步骤递归进行。
+        ///              5、在4步骤完结时，选中孙层2（选择节点）。
+        /// ***************************************应该还有BUG****************************************
         /// </summary>
-        /// 还有好多BUG
-        
         private void MultiSelected(TreeListViewItem treeViewItem)
         {
             List<NewBookmarkTreeNode> treeViewSource = this.UIItemSource;
@@ -47,16 +56,17 @@ NameSpace Piao
 
                 var ancestor = this.FindAncestor(highLevelItem, Math.Abs(senderLevel - anchorLevel));
 
-                int _level = 0;
-                for ( ; _level <= Math.Min(anchorLevel, senderLevel); )
+                if (lowLevelItem == ancestor)
                 {
-                    if (lowLevelItem == ancestor)
-                    {
-                        treeViewSource = (ancestor.Header as NewBookmarkTreeNode).ChildNode;
-                        break;
-                    }
+                    this.Selected(lowLevelItem.Header as NewBookmarkTreeNode);
+                    break;
+                }
 
-                    var tempAncestor = FindAncestor(ancestor, ++_level);
+                int _level = 0;
+                TreeListViewItem tempAncestor = null;
+                for ( ; _level < Math.Min(anchorLevel, senderLevel); )
+                {
+                    tempAncestor = FindAncestor(ancestor, ++_level);
                     if (tempAncestor != null)
                     {
                         if (tempAncestor == FindAncestor(lowLevelItem, _level))
@@ -71,15 +81,15 @@ NameSpace Piao
                 aboveIndexOfShared = treeViewSource.IndexOf(FindAncestor(ancestor, _level - 1).Header as NewBookmarkTreeNode);
                 underIndexOfShared = treeViewSource.IndexOf(FindAncestor(lowLevelItem, _level - 1).Header as NewBookmarkTreeNode);
 
+                var findLevel = tempAncestor == null ? -1 : tempAncestor.Level; // 用于存储向上寻根的等级
+                var selecteItem = Math.Min(aboveIndexOfShared, underIndexOfShared) == aboveIndexOfShared ? highLevelItem : lowLevelItem;
+
                 Action<int, TreeListViewItem> selecteAction = null;
                 selecteAction = (index, treeItem) =>
                 {
-                    if (index >= _level - 1 || _level < 0)
+                    if (index >= selecteItem.Level - findLevel - 1)
                     {
-                        if (index == 0)
-                        {
-                            this.Selected(treeItem.Header as NewBookmarkTreeNode);
-                        }
+                        this.Selected(selecteItem.Header as NewBookmarkTreeNode);
 
                         return;
                     }
@@ -89,9 +99,9 @@ NameSpace Piao
                     var pHeader = parent.Header as NewBookmarkTreeNode;
 
                     int m = pHeader.ChildNode.IndexOf(treeItem.Header as NewBookmarkTreeNode);
-                    for (; m < pHeader.ChildNode.Count; m++)
+                    for (; m < pHeader.ChildNode.Count - 1; m++)
                     {
-                        this.Selected(pHeader.ChildNode[m]);
+                        this.Selected(pHeader.ChildNode[m + 1]);
                     }
 
                     selecteAction(index + 1, parent);
@@ -102,14 +112,7 @@ NameSpace Piao
                     this.Selected(treeViewSource[k + 1]);
                 }
 
-                if(aboveIndexOfShared == -1 && underIndexOfShared == -1)
-                {
-                    selecteAction(0, lowLevelItem);
-                }
-                else
-                {
-                    selecteAction(0, Math.Min(aboveIndexOfShared, underIndexOfShared) == aboveIndexOfShared ? highLevelItem : lowLevelItem);
-                }
+                selecteAction(0, selecteItem);
                 
             }
             while (false);
